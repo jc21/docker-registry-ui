@@ -19,7 +19,7 @@ services:
       - registry
     restart: on-failure
   proxy:
-    image: nginx
+    image: jc21/registry-ui-proxy
     ports:
       - 80:80
     depends_on:
@@ -28,6 +28,4 @@ services:
     links:
       - ui
       - registry
-    volumes:
-      - ./conf.d:/etc/nginx/conf.d
     restart: on-failure

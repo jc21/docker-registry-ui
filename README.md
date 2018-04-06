@@ -72,6 +72,11 @@ This step is pretty simple and involves adding an environment variable to your D
 docker run -d -p 5000:5000 -e REGISTRY_STORAGE_DELETE_ENABLED=true --name my-registry registry:2
 ```
 
+#### Enabling Deletions in the UI
+
+Same as the Registry, just add the **`REGISTRY_STORAGE_DELETE_ENABLED=true`** environment variable to the `registry-ui` container.
+
+
 #### Cleaning up the Registry
 
 When you delete an image from the registry this won't actually remove the blob layers as you might expect. For this reason you have to run this command on your docker registry host to perform garbage collection:

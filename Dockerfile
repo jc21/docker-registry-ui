@@ -10,7 +10,6 @@ ADD node_modules        /srv/app/node_modules
 ADD views               /srv/app/views
 ADD LICENCE             /srv/app/LICENCE
 ADD package.json        /srv/app/package.json
-ADD README.md           /srv/app/README.md
 ADD src/backend         /srv/app/src/backend
 
 WORKDIR /srv/app
