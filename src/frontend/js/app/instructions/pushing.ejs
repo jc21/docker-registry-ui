@@ -3,7 +3,28 @@
 
     <div class="card">
         <div class="card-body">
-            <p>todo</p>
+            <p>After you pull or build an image:</p>
+            <pre><code><%- 'docker tag <someimage> ' + getRegistryDomain() + '/<someimage>:<tag>' %>
+<%- 'docker push ' + getRegistryDomain() + '/<someimage>:<tag>' %></code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Insecure Registries</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                If this registry is insecure and doesn't hide behing SSL certificates then you will need to configure your Docker client
+                to allow pushing to this insecure registry.
+            </p>
+
+            <h4>Linux</h4>
+            <p>Edit or you may even need to create the following file on your Linux server:</p>
+            <pre><code>/etc/docker/daemon.json</code></pre>
+            <p>And save the following content:</p>
+            <pre><code><%- JSON.stringify({'insecure-registries': [getRegistryDomain()]}, null, 2) %></code></pre>
+            <p>You will need to restart your Docker service before these changes will take effect.</p>
         </div>
     </div>
 </div>
