@@ -1,10 +1,12 @@
 'use strict';
 
 const REGISTRY_HOST = process.env.REGISTRY_HOST;
-const _             = require('lodash');
-const Docker        = require('../lib/docker-registry');
-const batchflow     = require('batchflow');
-const registry      = new Docker(REGISTRY_HOST, true);
+const REGISTRY_SSL  = !!process.env.REGISTRY_SSL;
+
+const _         = require('lodash');
+const Docker    = require('../lib/docker-registry');
+const batchflow = require('batchflow');
+const registry  = new Docker(REGISTRY_HOST, REGISTRY_SSL);
 
 const internalRepo = {
 

@@ -18,7 +18,8 @@ module.exports = Mn.View.extend({
 
     ui: {
         repos:       'a.repos-link',
-        tags_region: 'div.tags-region'
+        tags_region: 'div.tags-region',
+        refresh:     '.refresh'
     },
 
     regions: {
@@ -29,6 +30,12 @@ module.exports = Mn.View.extend({
         'click @ui.repos-link': function (e) {
             e.preventDefault();
             Controller.showDashboard();
+        },
+
+        'click @ui.refresh': function (e) {
+            e.preventDefault();
+            this.ui.refresh.addClass('btn-loading').prop('disabled', true);
+            this.fetchTags.bind(this)();
         }
     },
 
@@ -52,9 +59,30 @@ module.exports = Mn.View.extend({
         }
     },
 
-    initialize: function (options) {
+    fetchTags: function () {
+        this.fetching = true;
         let view = this;
 
+        Api.Repos.get(this.model.get('name'), true)
+            .then(response => {
+                if (typeof response.tags !== 'undefined') {
+                    view.model.set('tags_data', response.tags);
+                } else {
+                    view.error = new Error('Tags were not returned in response');
+                }
+            })
+            .then(() => {
+                view.fetching = false;
+                view.render();
+            })
+            .catch(err => {
+                view.fetching = false;
+                view.error    = err;
+                view.render();
+            });
+    },
+
+    initialize: function (options) {
         if (typeof options.model === 'undefined') {
             if (typeof options.name === 'undefined') {
                 this.error = new Error('Repo Name or Model was not given');
@@ -78,25 +106,7 @@ module.exports = Mn.View.extend({
             // Make sure model has tag data
             if (typeof this.model !== 'undefined' && !this.model.get('tags_data')) {
                 // Let's fetch it
-                this.fetching = true;
-
-                Api.Repos.get(this.model.get('name'), true)
-                    .then(response => {
-                        if (typeof response.tags !== 'undefined') {
-                            view.model.set('tags_data', response.tags);
-                        } else {
-                            view.error = new Error('Tags were not returned in response');
-                        }
-                    })
-                    .then(() => {
-                        view.fetching = false;
-                        view.render();
-                    })
-                    .catch(err => {
-                        view.fetching = false;
-                        view.error    = err;
-                        view.render();
-                    });
+                this.fetchTags.bind(this)();
             }
         }
     }
