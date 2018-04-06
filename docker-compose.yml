@@ -5,7 +5,7 @@ services:
     ports:
       - 80:80
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - REGISTRY_HOST=registry
       - REGISTRY_DOMAIN=registry.example.com
       - REGISTRY_STORAGE_DELETE_ENABLED=
