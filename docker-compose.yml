@@ -9,7 +9,7 @@ services:
       - NODE_ENV=${NODE_ENV}
       - REGISTRY_HOST=${REGISTRY_HOST}
       - REGISTRY_DOMAIN=registry.example.com
-      - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - REGISTRY_STORAGE_DELETE_ENABLED=
     volumes:
       - .:/srv/app
     command: node --max_old_space_size=250 --abort_on_uncaught_exception node_modules/nodemon/bin/nodemon.js
