@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Juxtapose REST API",
+  "description": "This is the Juxtapose REST API",
+  "id": "root",
+  "version": "1.0.0",
+  "links": [
+    {
+      "href": "http://juxtapose/api",
+      "rel": "self"
+    }
+  ],
+  "properties": {
+    "tokens": {
+      "$ref": "endpoints/tokens.json"
+    },
+    "users": {
+      "$ref": "endpoints/users.json"
+    },
+    "services": {
+      "$ref": "endpoints/services.json"
+    },
+    "templates": {
+      "$ref": "endpoints/templates.json"
+    },
+    "rules": {
+      "$ref": "endpoints/rules.json"
+    }
+  }
+}

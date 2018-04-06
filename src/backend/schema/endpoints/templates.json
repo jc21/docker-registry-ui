@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "endpoints/templates",
+  "title": "Templates",
+  "description": "Endpoints relating to Templates",
+  "stability": "stable",
+  "type": "object",
+  "definitions": {
+    "id": {
+      "$ref": "../definitions.json#/definitions/id"
+    },
+    "created_on": {
+      "$ref": "../definitions.json#/definitions/created_on"
+    },
+    "modified_on": {
+      "$ref": "../definitions.json#/definitions/modified_on"
+    },
+    "service_type": {
+      "$ref": "../definitions.json#/definitions/service_type"
+    },
+    "in_service_type": {
+      "$ref": "../definitions.json#/definitions/service_type"
+    },
+    "name": {
+      "description": "Name of Template",
+      "example": "Assigned Task Compact",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "content": {
+      "description": "Content",
+      "example": "{\"text\": \"Hello World\"}",
+      "type": "string"
+    },
+    "default_options": {
+      "description": "Default Options",
+      "example": {
+        "panel_color": "#ff0000"
+      },
+      "type": "object"
+    },
+    "example_data": {
+      "description": "Example Data",
+      "example": {
+        "summary": "Example Jira Summary"
+      },
+      "type": "object"
+    },
+    "event_types": {
+      "description": "Event Types",
+      "example": {
+        "summary": ["assigned", "resolved"]
+      },
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "render_engine": {
+      "description": "Render Engine",
+      "example": "liquid",
+      "type": "string",
+      "pattern": "^(ejs|liquid)$"
+    }
+  },
+  "links": [
+    {
+      "title": "List",
+      "description": "Returns a list of Templates",
+      "href": "/templates",
+      "access": "private",
+      "method": "GET",
+      "rel": "self",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "targetSchema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Create",
+      "description": "Creates a new Templates",
+      "href": "/templates",
+      "access": "private",
+      "method": "POST",
+      "rel": "create",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "required": [
+          "service_type",
+          "in_service_type",
+          "name",
+          "content",
+          "default_options",
+          "example_data",
+          "event_types"
+        ],
+        "properties": {
+          "service_type": {
+            "$ref": "#/definitions/service_type"
+          },
+          "in_service_type": {
+            "$ref": "#/definitions/in_service_type"
+          },
+          "name": {
+            "$ref": "#/definitions/name"
+          },
+          "content": {
+            "$ref": "#/definitions/content"
+          },
+          "default_options": {
+            "$ref": "#/definitions/default_options"
+          },
+          "example_data": {
+            "$ref": "#/definitions/default_options"
+          },
+          "event_types": {
+            "$ref": "#/definitions/event_types"
+          }
+        }
+      },
+      "targetSchema": {
+        "properties": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Update",
+      "description": "Updates a existing Template",
+      "href": "/templates/{definitions.identity.example}",
+      "access": "private",
+      "method": "PUT",
+      "rel": "update",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "service_type": {
+            "$ref": "#/definitions/service_type"
+          },
+          "in_service_type": {
+            "$ref": "#/definitions/in_service_type"
+          },
+          "name": {
+            "$ref": "#/definitions/name"
+          },
+          "content": {
+            "$ref": "#/definitions/content"
+          },
+          "default_options": {
+            "$ref": "#/definitions/default_options"
+          },
+          "example_data": {
+            "$ref": "#/definitions/default_options"
+          },
+          "event_types": {
+            "$ref": "#/definitions/event_types"
+          }
+        }
+      },
+      "targetSchema": {
+        "properties": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Delete",
+      "description": "Deletes a existing Template",
+      "href": "/templates/{definitions.identity.example}",
+      "access": "private",
+      "method": "DELETE",
+      "rel": "delete",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    }
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "created_on": {
+      "$ref": "#/definitions/created_on"
+    },
+    "modified_on": {
+      "$ref": "#/definitions/modified_on"
+    },
+    "service_type": {
+      "$ref": "#/definitions/service_type"
+    },
+    "in_service_type": {
+      "$ref": "#/definitions/in_service_type"
+    },
+    "name": {
+      "$ref": "#/definitions/name"
+    },
+    "content": {
+      "$ref": "#/definitions/content"
+    },
+    "default_options": {
+      "$ref": "#/definitions/default_options"
+    },
+    "example_data": {
+      "$ref": "#/definitions/example_data"
+    },
+    "event_types": {
+      "$ref": "#/definitions/event_types"
+    }
+  }
+}

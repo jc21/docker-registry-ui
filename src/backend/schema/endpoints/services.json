@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "endpoints/services",
+  "title": "Services",
+  "description": "Endpoints relating to Services",
+  "stability": "stable",
+  "type": "object",
+  "definitions": {
+    "id": {
+      "$ref": "../definitions.json#/definitions/id"
+    },
+    "created_on": {
+      "$ref": "../definitions.json#/definitions/created_on"
+    },
+    "modified_on": {
+      "$ref": "../definitions.json#/definitions/modified_on"
+    },
+    "type": {
+      "$ref": "../definitions.json#/definitions/service_type"
+    },
+    "name": {
+      "description": "Name",
+      "example": "JiraBot",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 100
+    },
+    "data": {
+      "description": "Data",
+      "example": {"api_token": "xox-somethingrandom"},
+      "type": "object"
+    }
+  },
+  "links": [
+    {
+      "title": "List",
+      "description": "Returns a list of Services",
+      "href": "/services",
+      "access": "private",
+      "method": "GET",
+      "rel": "self",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "targetSchema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Create",
+      "description": "Creates a new Service",
+      "href": "/services",
+      "access": "private",
+      "method": "POST",
+      "rel": "create",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "required": [
+          "type",
+          "name",
+          "data"
+        ],
+        "properties": {
+          "type": {
+            "$ref": "#/definitions/type"
+          },
+          "name": {
+            "$ref": "#/definitions/name"
+          },
+          "data": {
+            "$ref": "#/definitions/data"
+          }
+        }
+      },
+      "targetSchema": {
+        "properties": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Update",
+      "description": "Updates a existing Service",
+      "href": "/services/{definitions.identity.example}",
+      "access": "private",
+      "method": "PUT",
+      "rel": "update",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/definitions/type"
+          },
+          "name": {
+            "$ref": "#/definitions/name"
+          },
+          "data": {
+            "$ref": "#/definitions/data"
+          }
+        }
+      },
+      "targetSchema": {
+        "properties": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Delete",
+      "description": "Deletes a existing Service",
+      "href": "/services/{definitions.identity.example}",
+      "access": "private",
+      "method": "DELETE",
+      "rel": "delete",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    },
+    {
+      "title": "Test",
+      "description": "Tests a existing Service",
+      "href": "/services/{definitions.identity.example}/test",
+      "access": "private",
+      "method": "POST",
+      "rel": "test",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "required": [
+          "username",
+          "message"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    },
+    {
+      "title": "User List",
+      "description": "Get User List of a Service",
+      "href": "/services/{definitions.identity.example}/users",
+      "access": "private",
+      "method": "GET",
+      "rel": "users",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "required": [
+          "username",
+          "message"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    }
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "created_on": {
+      "$ref": "#/definitions/created_on"
+    },
+    "modified_on": {
+      "$ref": "#/definitions/modified_on"
+    },
+    "type": {
+      "$ref": "#/definitions/type"
+    },
+    "name": {
+      "$ref": "#/definitions/name"
+    },
+    "data": {
+      "$ref": "#/definitions/data"
+    }
+  }
+}

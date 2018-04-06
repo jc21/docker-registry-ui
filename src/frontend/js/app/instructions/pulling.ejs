@@ -1,0 +1,16 @@
+<div class="container">
+    <h2>Pulling from this Registry</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <p>Viewing any Image from the Repositories menu will give you a command in the following format:</p>
+            <pre><code><%- 'docker pull ' + getRegistryDomain() + '/<image>:<tag>' %></code></pre>
+
+            <h4>Insecure Registries</h4>
+            <p>
+                If this registry is insecure and doesn't hide behing SSL certificates then you will need to configure your Docker client
+                to allow pulling from this insecure registry.
+            </p>
+        </div>
+    </div>
+</div>

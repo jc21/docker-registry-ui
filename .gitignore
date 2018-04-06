@@ -1,0 +1,7 @@
+.idea
+._*
+.DS_Store
+.env
+node_modules
+dist/*
+webpack_stats.html

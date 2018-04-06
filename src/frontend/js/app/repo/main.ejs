@@ -1,0 +1,13 @@
+<div class="container">
+    <h2 class="margin-bottom-5"><%- name %></h2>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#" class="repos-link"><i class="fe fe-arrow-left" data-toggle="tooltip" title="fe fe-chevron-left"></i> Repositories</a></li>
+    </ol>
+
+    <% if (isFetching()) { %>
+        <span class="loader"></span>
+    <% } %>
+
+    <div class="container tags-region"></div>
+</div>

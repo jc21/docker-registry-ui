@@ -1,0 +1,303 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "endpoints/rules",
+  "title": "Rules",
+  "description": "Endpoints relating to Rules",
+  "stability": "stable",
+  "type": "object",
+  "definitions": {
+    "id": {
+      "$ref": "../definitions.json#/definitions/id"
+    },
+    "created_on": {
+      "$ref": "../definitions.json#/definitions/created_on"
+    },
+    "modified_on": {
+      "$ref": "../definitions.json#/definitions/modified_on"
+    },
+    "user_id": {
+      "$ref": "../definitions.json#/definitions/user_id"
+    },
+    "priority_order": {
+      "description": "Priority Order",
+      "example": 1,
+      "type": "integer",
+      "minimum": 0
+    },
+    "in_service_id": {
+      "description": "Incoming Service ID",
+      "example": 1234,
+      "type": "integer",
+      "minimum": 1
+    },
+    "trigger": {
+      "description": "Trigger Type",
+      "example": "assigned",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 50
+    },
+    "extra_conditions": {
+      "description": "Extra Incoming Trigger Conditions",
+      "example": {
+        "project": "BB"
+      },
+      "type": "object"
+    },
+    "out_service_id": {
+      "description": "Outgoing Service ID",
+      "example": 1234,
+      "type": "integer",
+      "minimum": 1
+    },
+    "out_template_id": {
+      "description": "Outgoing Template ID",
+      "example": 1234,
+      "type": "integer",
+      "minimum": 1
+    },
+    "out_template_options": {
+      "description": "Custom options for Outgoing Template",
+      "example": {
+        "panel_color": "#ff00aa"
+      },
+      "type": "object"
+    },
+    "fired_count": {
+      "description": "Fired Count",
+      "example": 854,
+      "readOnly": true,
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "links": [
+    {
+      "title": "List",
+      "description": "Returns a list of Rules",
+      "href": "/rules",
+      "access": "private",
+      "method": "GET",
+      "rel": "self",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "targetSchema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Create",
+      "description": "Creates a new Rule",
+      "href": "/rules",
+      "access": "private",
+      "method": "POST",
+      "rel": "create",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "required": [
+          "in_service_id",
+          "trigger",
+          "out_service_id",
+          "out_template_id"
+        ],
+        "properties": {
+          "user_id": {
+            "$ref": "#/definitions/user_id"
+          },
+          "priority_order": {
+            "$ref": "#/definitions/priority_order"
+          },
+          "in_service_id": {
+            "$ref": "#/definitions/in_service_id"
+          },
+          "trigger": {
+            "$ref": "#/definitions/trigger"
+          },
+          "extra_conditions": {
+            "$ref": "#/definitions/extra_conditions"
+          },
+          "out_service_id": {
+            "$ref": "#/definitions/out_service_id"
+          },
+          "out_template_id": {
+            "$ref": "#/definitions/out_template_id"
+          },
+          "out_template_options": {
+            "$ref": "#/definitions/out_template_options"
+          }
+        }
+      },
+      "targetSchema": {
+        "properties": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Update",
+      "description": "Updates a existing Rule",
+      "href": "/rules/{definitions.identity.example}",
+      "access": "private",
+      "method": "PUT",
+      "rel": "update",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "priority_order": {
+            "$ref": "#/definitions/priority_order"
+          },
+          "in_service_id": {
+            "$ref": "#/definitions/in_service_id"
+          },
+          "trigger": {
+            "$ref": "#/definitions/trigger"
+          },
+          "extra_conditions": {
+            "$ref": "#/definitions/extra_conditions"
+          },
+          "out_service_id": {
+            "$ref": "#/definitions/out_service_id"
+          },
+          "out_template_id": {
+            "$ref": "#/definitions/out_template_id"
+          },
+          "out_template_options": {
+            "$ref": "#/definitions/out_template_options"
+          }
+        }
+      },
+      "targetSchema": {
+        "properties": {
+          "$ref": "#/properties"
+        }
+      }
+    },
+    {
+      "title": "Delete",
+      "description": "Deletes a existing Rule",
+      "href": "/rules/{definitions.identity.example}",
+      "access": "private",
+      "method": "DELETE",
+      "rel": "delete",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    },
+    {
+      "title": "Order",
+      "description": "Sets the order for the rules",
+      "href": "/rules/order",
+      "access": "private",
+      "method": "POST",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "order",
+            "rule_id"
+          ],
+          "properties": {
+            "order": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rule_id": {
+              "$ref": "../definitions.json#/definitions/id"
+            }
+          }
+        }
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    },
+    {
+      "title": "Copy",
+      "description": "Copies rules from one user to another",
+      "href": "/rules/copy",
+      "access": "private",
+      "method": "POST",
+      "http_header": {
+        "$ref": "../examples.json#/definitions/auth_header"
+      },
+      "schema": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "to": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "service_type": {
+            "$ref": "../definitions.json#/definitions/service_type"
+          }
+        }
+      },
+      "targetSchema": {
+        "type": "boolean"
+      }
+    }
+  ],
+  "properties": {
+    "id": {
+      "$ref": "#/definitions/id"
+    },
+    "created_on": {
+      "$ref": "#/definitions/created_on"
+    },
+    "modified_on": {
+      "$ref": "#/definitions/modified_on"
+    },
+    "user_id": {
+      "$ref": "#/definitions/user_id"
+    },
+    "priority_order": {
+      "$ref": "#/definitions/priority_order"
+    },
+    "in_service_id": {
+      "$ref": "#/definitions/in_service_id"
+    },
+    "trigger": {
+      "$ref": "#/definitions/trigger"
+    },
+    "extra_conditions": {
+      "$ref": "#/definitions/extra_conditions"
+    },
+    "out_service_id": {
+      "$ref": "#/definitions/out_service_id"
+    },
+    "out_template_id": {
+      "$ref": "#/definitions/out_template_id"
+    },
+    "out_template_options": {
+      "$ref": "#/definitions/out_template_options"
+    },
+    "fired_count": {
+      "$ref": "#/definitions/fired_count"
+    }
+  }
+}

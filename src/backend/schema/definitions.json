@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "id": "definitions",
+  "definitions": {
+    "id": {
+      "description": "Unique identifier",
+      "example": 123456,
+      "readOnly": true,
+      "type": "integer",
+      "minimum": 1
+    },
+    "token": {
+      "type": "string",
+      "minLength": 10
+    },
+    "expand": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "sort": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "field",
+          "dir"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "dir": {
+            "type": "string",
+            "pattern": "^(asc|desc)$"
+          }
+        }
+      }
+    },
+    "query": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      ]
+    },
+    "criteria": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "fields": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "omit": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "created_on": {
+      "description": "Date and time of creation",
+      "format": "date-time",
+      "readOnly": true,
+      "type": "string"
+    },
+    "modified_on": {
+      "description": "Date and time of last update",
+      "format": "date-time",
+      "readOnly": true,
+      "type": "string"
+    },
+    "user_id": {
+      "description": "User ID",
+      "example": 1234,
+      "type": "integer",
+      "minimum": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "email": {
+      "description": "Email Address",
+      "example": "john@example.com",
+      "format": "email",
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 100
+    },
+    "password": {
+      "description": "Password",
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 255
+    },
+    "jira_webhook_data": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "webhookEvent",
+        "timestamp"
+      ],
+      "properties": {
+        "webhookEvent": {
+          "type": "string",
+          "minLength": 2
+        },
+        "timestamp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "user": {
+          "type": "object"
+        },
+        "issue": {
+          "type": "object"
+        }
+      }
+    },
+    "bitbucket_webhook_data": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "eventKey",
+        "date"
+      ],
+      "properties": {
+        "eventKey": {
+          "type": "string",
+          "minLength": 2
+        },
+        "date": {
+          "type": "string",
+          "minimum": 19
+        },
+        "actor": {
+          "type": "object"
+        },
+        "pullRequest": {
+          "type": "object"
+        }
+      }
+    },
+    "dockerhub_webhook_data": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "push_data",
+        "repository"
+      ],
+      "properties": {
+        "push_data": {
+          "type": "object"
+        },
+        "repository": {
+          "type": "object"
+        }
+      }
+    },
+    "zendesk_webhook_data": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ticket",
+        "current_user"
+      ],
+      "properties": {
+        "ticket": {
+          "type": "object"
+        },
+        "current_user": {
+          "type": "object"
+        }
+      }
+    },
+    "service_type": {
+      "description": "Service Type",
+      "example": "slack",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 30,
+      "pattern": "^(slack|jira-webhook|bitbucket-webhook|dockerhub-webhook|zendesk-webhook|jabber)$"
+    }
+  }
+}
