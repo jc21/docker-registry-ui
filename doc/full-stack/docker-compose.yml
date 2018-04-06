@@ -2,15 +2,13 @@ version: "2"
 services:
   registry:
     image: registry:2
-    ports:
-      - 5000:5000
     environment:
       - REGISTRY_HTTP_SECRET=o43g2kjgn2iuhv2k4jn2f23f290qfghsdg
       - REGISTRY_STORAGE_DELETE_ENABLED=
     volumes:
       - ./registry-data:/var/lib/registry
   ui:
-    image: brui
+    image: jc21/registry-ui
     environment:
       - NODE_ENV=production
       - REGISTRY_HOST=registry:5000
@@ -23,7 +21,7 @@ services:
   proxy:
     image: nginx
     ports:
-      - 3080:80
+      - 80:80
     depends_on:
       - ui
       - registry
