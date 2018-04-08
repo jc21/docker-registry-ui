@@ -52,6 +52,11 @@ services:
     restart: on-failure
 ```
 
+If you are like most people and want your docker registry and your docker ui to co-exist on the same domain on the same port, please
+refer to the Nginx configuration used by the [docker-registry-ui-proxy image](https://github.com/jc21/docker-registry-ui-proxy/blob/master/conf.d/proxy.conf)
+as an example. Note that there are some tweaks in there that you will need to be able to push successfully.
+
+
 ## Environment Variables
 
 - **`REGISTRY_HOST`** - *Required:* The registry hostname and optional port to connect to for API calls
