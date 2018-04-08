@@ -23,7 +23,8 @@ Easily start a Registry Stack by adding [my template catalog](https://github.com
 
 ### Creating a full Docker Registry Stack with this UI
 
-By far the easiest way to get up and running. Take all the files in the `docs/full-stack` example folder, put them on your Docker host and run:
+By far the easiest way to get up and running. Refer to the example [docker-compose.yml](https://github.com/jc21/docker-registry-ui/blob/master/doc/full-stack/docker-compose.yml)
+example file, put it on your Docker host and run:
 
 ```bash
 docker-compose up -d
