@@ -97,6 +97,16 @@ And if you wanted to make a cron job that runs every 30 mins:
 0,30 * * * * /bin/docker exec -it my-registry bin/registry garbage-collect /etc/docker/registry/config.yml >> /dev/null 2>&1
 ```
 
+
+## Screenshots
+
+[![Dashboard](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-1.jpg "Dashboard")](https://public.jc21.com/docker-registry-ui/screenshots/drui-1.jpg)
+[![Image](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-2.jpg "Image")](https://public.jc21.com/docker-registry-ui/screenshots/drui-2.jpg)
+[![Pulling](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-3.jpg "Pulling")](https://public.jc21.com/docker-registry-ui/screenshots/drui-3.jpg)
+[![Pushing](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-4.jpg "Pushing")](https://public.jc21.com/docker-registry-ui/screenshots/drui-4.jpg)
+[![Deleting](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-5.jpg "Deleting")](https://public.jc21.com/docker-registry-ui/screenshots/drui-5.jpg)
+
+
 ## TODO
 
 - Add pagination to Repositories, currently only 300 images will be fetched
