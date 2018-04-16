@@ -105,7 +105,14 @@ const internalRepo = {
                                 // for each image
                                 registry.getImageTags(image.name)
                                     .then(tags_result => {
-                                        image_result.tags = tags_result.tags;
+                                        if (typeof tags_result === 'string') {
+                                            // usually some sort of error
+                                            console.error('Error: Tags result was: ', tags_result);
+                                            image_result.tags = null;
+                                        } else {
+                                            image_result.tags = tags_result.tags;
+                                        }
+
                                         next(image_result);
                                     })
                                     .catch(err => {
