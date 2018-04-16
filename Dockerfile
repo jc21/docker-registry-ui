@@ -1,5 +1,8 @@
 FROM node:alpine
 
+MAINTAINER Jamie Curnow <jc@jc21.com>
+LABEL maintainer="Jamie Curnow <jc@jc21.com>"
+
 RUN apk update && apk add --no-cache curl && rm -rf /var/cache/apk/*
 
 ENV NODE_ENV=production
