@@ -1,3 +1,11 @@
+.nav-tabs {
+    border-bottom: none;
+
+    .nav-submenu {
+        top: 54px;
+    }
+}
+
 #app {
     > .loader {
         display: none;
@@ -63,3 +71,4 @@ tbody tr {
         font-family: Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
 }
+
