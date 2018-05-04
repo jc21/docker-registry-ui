@@ -18,11 +18,11 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'docker run --rm -v $(pwd)/manager:/srv/manager -w /srv/manager jc21/node yarn --registry=$NPM_REGISTRY install'
-        sh 'docker run --rm -v $(pwd)/manager:/srv/manager -w /srv/manager jc21/node gulp build'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node gulp build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd)/manager:/srv/manager -w /srv/manager jc21/node yarn --registry=$NPM_REGISTRY install --prod'
-        sh 'docker run --rm -v $(pwd)/manager:/data $DOCKER_CI_TOOLS node-prune'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install --prod'
+        sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
         sh 'docker build -t $TEMP_IMAGE_NAME .'
 
         sh '''rm -rf zips
