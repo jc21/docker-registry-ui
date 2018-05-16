@@ -7,6 +7,7 @@ const _         = require('lodash');
 const Docker    = require('../lib/docker-registry');
 const batchflow = require('batchflow');
 const registry  = new Docker(REGISTRY_HOST, REGISTRY_SSL);
+const errors    = require('../lib/error');
 
 const internalRepo = {
 
@@ -18,9 +19,32 @@ const internalRepo = {
     get: (name, full) => {
         return registry.getImageTags(name)
             .then(tags_data => {
+                // detect errors
+                if (typeof tags_data.errors !== 'undefined' && tags_data.errors.length) {
+                    let top_err = tags_data.errors.shift();
+                    if (top_err.code === 'NAME_UNKNOWN') {
+                        throw new errors.ItemNotFoundError(name);
+                    } else {
+                        throw new errors.RegistryError(top_err.code, top_err.message);
+                    }
+                }
+
                 if (full && tags_data.tags !== null) {
+                    // Order the tags naturally, but put latest at the top if it exists
+                    let latest_idx = tags_data.tags.indexOf('latest');
+                    if (latest_idx !== -1) {
+                        _.pullAt(tags_data.tags, [latest_idx]);
+                    }
+
+                    // sort
+                    tags_data.tags = tags_data.tags.sort((a, b) => a.localeCompare(b));
+
+                    if (latest_idx !== -1) {
+                        tags_data.tags.unshift('latest');
+                    }
+
                     return new Promise((resolve, reject) => {
-                        batchflow(tags_data.tags).parallel(2)
+                        batchflow(tags_data.tags).sequential()
                             .each((i, tag, next) => {
                                 // for each tag, we want to get 2 manifests.
                                 // Version 2 returns the layers and the correct image id
@@ -110,7 +134,18 @@ const internalRepo = {
                                             console.error('Error: Tags result was: ', tags_result);
                                             image_result.tags = null;
                                         } else {
-                                            image_result.tags = tags_result.tags;
+                                            // Order the tags naturally, but put latest at the top if it exists
+                                            let latest_idx = tags_result.tags.indexOf('latest');
+                                            if (latest_idx !== -1) {
+                                                _.pullAt(tags_result.tags, [latest_idx]);
+                                            }
+
+                                            // sort
+                                            image_result.tags = tags_result.tags.sort((a, b) => a.localeCompare(b));
+
+                                            if (latest_idx !== -1) {
+                                                image_result.tags.unshift('latest');
+                                            }
                                         }
 
                                         next(image_result);

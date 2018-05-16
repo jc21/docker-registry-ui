@@ -1,2 +1,24 @@
-@import '../../../node_modules/tabler-ui/dist/assets/css/dashboard';
-@import 'theme';
+@import "~tabler-ui/dist/assets/css/dashboard";
+
+/* Before any JS content is loaded */
+#app > .loader, .container > .loader {
+    position: absolute;
+    left: 49%;
+    top: 40%;
+    display: block;
+}
+
+.tag-card {
+    .card-alert {
+        min-height: 52px;
+    }
+
+    .delete-confirm, .delete-unsupported {
+        display: none;
+        transition: all 0.5s ease;
+    }
+
+    .pull-command {
+        font-family: Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+}

@@ -3,13 +3,18 @@ services:
   app:
     image: jc21/node
     ports:
-      - 80:80
+      - ${HTTP_PORT}:80
     environment:
+      - DEBUG=${DEBUG}
+      - FORCE_COLOR=1
       - NODE_ENV=development
-      - REGISTRY_HOST=registry
-      - REGISTRY_DOMAIN=registry.example.com
-      - REGISTRY_STORAGE_DELETE_ENABLED=
+      - REGISTRY_HOST=${REGISTRY_HOST}
+      - REGISTRY_DOMAIN=${REGISTRY_HOST}
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - REGISTRY_SSL=true
     volumes:
       - .:/srv/app
+      - ./.yarnrc:/root/.yarnrc
+      - /usr/local/share/.cache/yarn:/usr/local/share/.cache/yarn
     command: node --max_old_space_size=250 --abort_on_uncaught_exception node_modules/nodemon/bin/nodemon.js
 

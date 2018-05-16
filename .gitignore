@@ -1,7 +1,10 @@
 .idea
 ._*
 .DS_Store
-.env
 node_modules
 dist/*
+package-lock.json
+yarn-error.log
+yarn.lock
 webpack_stats.html
+tmp/*

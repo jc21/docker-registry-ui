@@ -49,6 +49,7 @@ app.use(function (req, res, next) {
 /**
  * Routes
  */
+app.use('/assets', express.static('dist/assets'));
 app.use('/css', express.static('dist/css'));
 app.use('/fonts', express.static('dist/fonts'));
 app.use('/images', express.static('dist/images'));

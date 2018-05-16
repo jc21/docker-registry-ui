@@ -1,9 +1,18 @@
-const webpack    = require('webpack');
-const Visualizer = require('webpack-visualizer-plugin');
-const config     = require('config');
+const path                 = require('path');
+const HtmlWebPackPlugin    = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin       = require('uglifyjs-webpack-plugin');
+const Visualizer           = require('webpack-visualizer-plugin');
+const CopyWebpackPlugin    = require('copy-webpack-plugin');
 
 module.exports = {
-    resolve: {
+    entry:        './src/frontend/js/index.js',
+    output:       {
+        path:       path.resolve(__dirname, 'dist'),
+        filename:   'js/main.js',
+        publicPath: '/'
+    },
+    resolve:      {
         alias: {
             'tabler-core':      'tabler-ui/dist/assets/js/core',
             'bootstrap':        'tabler-ui/dist/assets/js/vendors/bootstrap.bundle.min',
@@ -16,55 +25,106 @@ module.exports = {
             'circle-progress':  'tabler-ui/dist/assets/js/vendors/circle-progress.min'
         }
     },
-    context: __dirname + '/src/frontend/js',
-    entry:   './main.js',
-    output:  {
-        filename:          'main.js',
-        path:              __dirname + '/dist/js',
-        publicPath:        '/js/',
-        sourceMapFilename: 'dnBOUAwY76qx3MmZxtHn.map'
-    },
-    module:  {
-        loaders: [
+    module:       {
+        rules: [
+            // Shims for tabler-ui
+            {
+                test:   /assets\/js\/core/,
+                loader: 'imports-loader?bootstrap'
+            },
+            {
+                test:   /jquery-jvectormap-de-merc/,
+                loader: 'imports-loader?vector-map'
+            },
+            {
+                test:   /jquery-jvectormap-world-mill/,
+                loader: 'imports-loader?vector-map'
+            },
+
+            // other:
             {
                 test:    /\.js$/,
-                exclude: /node_modules((?!tabler).)*$/,
-                loader:  'babel-loader', // 'babel-loader' is also a valid name to reference
-                query:   {
-                    presets: ['@babel/es2015']
+                exclude: /node_modules/,
+                use:     {
+                    loader: 'babel-loader'
                 }
             },
             {
-                test:   /\.ejs$/,
-                loader: 'ejs-loader'
+                test: /\.html$/,
+                use:  [
+                    {
+                        loader:  'html-loader',
+                        options: {
+                            minimize: false,
+                            hash:     true
+                        }
+                    }
+                ]
             },
-            // Shims for tabler-ui
-            {test: /assets\/js\/core/, loader: 'imports-loader?bootstrap'},
-            {test: /jquery-jvectormap-de-merc/, loader: 'imports-loader?vector-map'},
-            {test: /jquery-jvectormap-world-mill/, loader: 'imports-loader?vector-map'}
+            {
+                test: /\.scss$/,
+                use:  [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /.*tabler.*\.(jpe?g|gif|png|svg|eot|woff|ttf)$/,
+                use:  [
+                    {
+                        loader:  'file-loader',
+                        options: {
+                            outputPath: 'assets/tabler-ui/'
+                        }
+                    }
+                ]
+            }
         ]
     },
-    plugins: [
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new webpack.optimize.LimitChunkCountPlugin({
-            maxChunks: 1
+    plugins:      [
+        new HtmlWebPackPlugin({
+            template: './src/frontend/html/index.html',
+            filename: './index.html'
         }),
-        new webpack.ProvidePlugin({
-            $:      'jquery',
-            jQuery: 'jquery',
-            _:      'underscore'
+        new MiniCssExtractPlugin({
+            filename:      'css/[name].css',
+            chunkFilename: 'css/[id].css'
         }),
         new Visualizer({
-            filename: '../../webpack_stats.html'
+            filename: '../webpack_stats.html'
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                unsafe:        true,
-                drop_console:  config.util.getEnv('NODE_ENV') !== 'development',
-                drop_debugger: config.util.getEnv('NODE_ENV') !== 'development',
-                screw_ie8:     true,
-                warnings:      false
-            }
-        })
-    ]
+        new CopyWebpackPlugin([{
+            from:    'src/frontend/app-images',
+            to:      'images',
+            toType:  'dir',
+            context: '/srv/app'
+        }])
+    ],
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                cache:         './tmp/.webpack-cache',
+                parallel:      4,
+                uglifyOptions: {
+                    ecma:     6,
+                    compress: {
+                        drop_console: false
+                    },
+                    output:   {
+                        comments: false,
+                        beautify: false
+                    },
+                    ie8:      false
+                }
+            })
+        ]
+    },
+    devServer:    {
+        contentBase:      path.join(__dirname, 'dist'),
+        compress:         true,
+        port:             8080,
+        disableHostCheck: true,
+        host:             '0.0.0.0'
+    }
 };

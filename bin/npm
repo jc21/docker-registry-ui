@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose run --no-deps --rm app npm $@
+sudo /usr/local/bin/docker-compose run --no-deps --rm app npm $@
 exit $?
