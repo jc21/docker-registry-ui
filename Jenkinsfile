@@ -18,10 +18,10 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm --registry=$NPM_REGISTRY install'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node gulp build'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm --registry=$NPM_REGISTRY install --production'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install --prod'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
         sh 'docker build -t $TEMP_IMAGE_NAME .'
 
@@ -38,11 +38,11 @@ pipeline {
             docker-registry-ui/node_modules\\* \\
             docker-registry-ui/.git\\* \\
             docker-registry-ui/.env \\
+            docker-registry-ui/.babelrc \\
+            docker-registry-ui/yarn\\* \\
             docker-registry-ui/.gitignore \\
             docker-registry-ui/docker-compose.yml \\
             docker-registry-ui/Dockerfile \\
-            docker-registry-ui/gulpfile.js \\
-            docker-registry-ui/knexfile.js \\
             docker-registry-ui/nodemon.json \\
             docker-registry-ui/webpack.config.js \\
             docker-registry-ui/webpack_stats.html
@@ -56,6 +56,7 @@ pipeline {
       }
       steps {
         sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
+        /*
         sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
         sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
         sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
@@ -67,6 +68,7 @@ pipeline {
           sh 'docker push docker.io/jc21/$IMAGE_NAME:latest'
           sh 'docker push docker.io/jc21/$IMAGE_NAME:$TAG_VERSION'
         }
+        */
 
         dir(path: 'zips') {
           archiveArtifacts(artifacts: '**/*.zip', caseSensitive: true, onlyIfSuccessful: true)
