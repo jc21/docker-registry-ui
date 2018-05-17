@@ -5,7 +5,6 @@ import $ from 'jquery';
 import {app} from 'hyperapp';
 import actions from './actions';
 import state from './state';
-//import view from './components/ui';
 import {location} from 'hyperapp-hash-router';
 import router from './router';
 
@@ -123,6 +122,7 @@ const main = app(
     document.getElementById('app')
 );
 
-const unsubscribe = location.subscribe(main.location);
+location.subscribe(main.location);
 
 main.bootstrap();
+setInterval(main.bootstrap, 30000);

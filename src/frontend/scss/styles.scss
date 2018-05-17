@@ -9,16 +9,15 @@
 }
 
 .tag-card {
-    .card-alert {
-        min-height: 52px;
-    }
-
-    .delete-confirm, .delete-unsupported {
-        display: none;
-        transition: all 0.5s ease;
-    }
-
     .pull-command {
         font-family: Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
+}
+
+.pull-right {
+    float: right;
+}
+
+.text-faded {
+    opacity: 0.5;
 }

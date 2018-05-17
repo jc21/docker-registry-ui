@@ -24,7 +24,7 @@ router.get('/', (req, res/*, next*/) => {
             revision: parseInt(version.shift(), 10)
         },
         config:  {
-            REGISTRY_STORAGE_DELETE_ENABLED: !!process.env.REGISTRY_STORAGE_DELETE_ENABLED,
+            REGISTRY_STORAGE_DELETE_ENABLED: process.env.REGISTRY_STORAGE_DELETE_ENABLED && process.env.REGISTRY_STORAGE_DELETE_ENABLED.toLowerCase() === 'true' || parseInt(process.env.REGISTRY_STORAGE_DELETE_ENABLED, 10) === 1,
             REGISTRY_DOMAIN:                 process.env.REGISTRY_DOMAIN || null
         }
     });

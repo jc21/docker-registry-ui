@@ -1,7 +1,7 @@
 'use strict';
 
 const REGISTRY_HOST = process.env.REGISTRY_HOST;
-const REGISTRY_SSL  = !!process.env.REGISTRY_SSL;
+const REGISTRY_SSL  = process.env.REGISTRY_SSL && process.env.REGISTRY_SSL.toLowerCase() === 'true' || parseInt(process.env.REGISTRY_SSL, 10) === 1;
 
 const _         = require('lodash');
 const Docker    = require('../lib/docker-registry');

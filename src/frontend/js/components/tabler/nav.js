@@ -1,7 +1,7 @@
 import {div, i, ul, li, a} from '@hyperapp/html';
 import {Link} from 'hyperapp-hash-router';
 
-export default () => {
+export default (show_delete) => {
 
     let selected = 'images';
     if (window.location.hash.substr(0, 14) === '#/instructions') {
@@ -27,7 +27,7 @@ export default () => {
                             div({class: 'dropdown-menu dropdown-menu-arrow'}, [
                                 Link({class: 'dropdown-item', to: '/instructions/pulling'}, 'Pulling'),
                                 Link({class: 'dropdown-item', to: '/instructions/pushing'}, 'Pushing'),
-                                Link({class: 'dropdown-item', to: '/instructions/deleting'}, 'Deleting')
+                                show_delete ? Link({class: 'dropdown-item', to: '/instructions/deleting'}, 'Deleting') : null
                             ])
                         ])
                     ])

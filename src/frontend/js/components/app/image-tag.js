@@ -9,16 +9,12 @@ export default (tag, config) => {
         total_size = total_size.toFixed(0);
     }
 
-    let domain         = config.REGISTRY_DOMAIN || window.location.hostname;
-    let delete_enabled = config.REGISTRY_STORAGE_DELETE_ENABLED || false;
+    let domain = config.REGISTRY_DOMAIN || window.location.hostname;
 
     return div({class: 'card tag-card'}, [
-        div({class: 'card-header'}, [
-            h3({class: 'card-title'}, tag.name),
-            delete_enabled ? div({class: 'card-options'},
-                a({class: 'btn btn-secondary btn-sm ml-2 delete-link'}, 'Delete')
-            ) : null
-        ]),
+        div({class: 'card-header'},
+            h3({class: 'card-title'}, tag.name)
+        ),
         div({class: 'card-alert alert alert-secondary mb-0 pull-command'},
             'docker pull ' + domain + '/' + tag.image_name + ':' + tag.name
         ),
