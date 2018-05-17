@@ -31,17 +31,14 @@ pipeline {
             \\*.gitkeep \\
             docker-registry-ui/zips\\* \\
             docker-registry-ui/bin\\* \\
-            docker-registry-ui/config/my.cnf \\
-            docker-registry-ui/data\\* \\
             docker-registry-ui/src/frontend\\* \\
-            docker-registry-ui/test\\* \\
+            docker-registry-ui/tmp\\* \\
             docker-registry-ui/node_modules\\* \\
             docker-registry-ui/.git\\* \\
             docker-registry-ui/.env \\
             docker-registry-ui/.babelrc \\
             docker-registry-ui/yarn\\* \\
             docker-registry-ui/.gitignore \\
-            docker-registry-ui/docker-compose.yml \\
             docker-registry-ui/Dockerfile \\
             docker-registry-ui/nodemon.json \\
             docker-registry-ui/webpack.config.js \\
@@ -56,7 +53,6 @@ pipeline {
       }
       steps {
         sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
-        /*
         sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
         sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
         sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
@@ -68,7 +64,6 @@ pipeline {
           sh 'docker push docker.io/jc21/$IMAGE_NAME:latest'
           sh 'docker push docker.io/jc21/$IMAGE_NAME:$TAG_VERSION'
         }
-        */
 
         dir(path: 'zips') {
           archiveArtifacts(artifacts: '**/*.zip', caseSensitive: true, onlyIfSuccessful: true)
