@@ -2,17 +2,16 @@
 
 # Docker Registry UI
 
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-green.svg)
 ![Stars](https://img.shields.io/docker/stars/jc21/registry-ui.svg)
 ![Pulls](https://img.shields.io/docker/pulls/jc21/registry-ui.svg)
 
-![Build Status](http://bamboo.jc21.com/plugins/servlet/wittified/build-status/AB-DRUI)
-
-Ever wanted a visual website to show you the contents of your Docker Registry? Look no further. Now you can list your Images, Tags and info in style.
+Have you ever wanted a visual website to show you the contents of your Docker Registry? Look no further. Now you can list your Images, Tags and info in style.
 
 This project comes as a [pre-built docker image](https://hub.docker.com/r/jc21/registry-ui/) capable of connecting to another registry.
 
 Note: This project only works with Docker Registry v2.
+
 
 ## Getting started
 
@@ -62,7 +61,7 @@ as an example. Note that there are some tweaks in there that you will need to be
 - **`REGISTRY_HOST`** - *Required:* The registry hostname and optional port to connect to for API calls
 - **`REGISTRY_SSL`** - *Optional:* Specify `true` for this if the registry is accessed via HTTPS
 - **`REGISTRY_DOMAIN`** - *Optional:* This is the registry domain to display in the UI for example push/pull code
-- **`REGISTRY_STORAGE_DELETE_ENABLED`** - *Optional:* Specify `true` to enable deletion features, but see below first!
+- **`REGISTRY_STORAGE_DELETE_ENABLED`** - *Optional:* Specify `true` or `1` to enable deletion features, but see below first!
 
 
 ## Deletion Support
@@ -80,7 +79,8 @@ docker run -d -p 5000:5000 -e REGISTRY_STORAGE_DELETE_ENABLED=true --name my-reg
 
 #### Enabling Deletions in the UI
 
-Same as the Registry, just add the **`REGISTRY_STORAGE_DELETE_ENABLED=true`** environment variable to the `registry-ui` container.
+Same as the Registry, just add the **`REGISTRY_STORAGE_DELETE_ENABLED=true`** environment variable to the `registry-ui` container. Note that `true` is the only
+acceptable value for this environment variable.
 
 
 #### Cleaning up the Registry
@@ -104,12 +104,9 @@ And if you wanted to make a cron job that runs every 30 mins:
 [![Image](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-2.jpg "Image")](https://public.jc21.com/docker-registry-ui/screenshots/drui-2.jpg)
 [![Pulling](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-3.jpg "Pulling")](https://public.jc21.com/docker-registry-ui/screenshots/drui-3.jpg)
 [![Pushing](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-4.jpg "Pushing")](https://public.jc21.com/docker-registry-ui/screenshots/drui-4.jpg)
-[![Deleting](https://public.jc21.com/docker-registry-ui/screenshots/small/drui-5.jpg "Deleting")](https://public.jc21.com/docker-registry-ui/screenshots/drui-5.jpg)
 
 
 ## TODO
 
 - Add pagination to Repositories, currently only 300 images will be fetched
 - Add support for registry authentication mechanisms
-
-

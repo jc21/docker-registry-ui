@@ -1,12 +1,8 @@
 {
-    "name": "hyper",
-    "version": "1.0.0",
-    "description": "example",
+    "name": "docker-registry-ui",
+    "version": "2.0.0",
+    "description": "A nice web interface for managing your Docker Registry images",
     "main": "src/backend/index.js",
-    "directories": {
-        "doc": "docs",
-        "test": "test"
-    },
     "dependencies": {
         "ajv": "^5.2.2",
         "batchflow": "^0.4.0",
