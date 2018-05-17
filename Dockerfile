@@ -1,16 +1,16 @@
-FROM node:alpine
+FROM docker.io/node:9-slim
 
 MAINTAINER Jamie Curnow <jc@jc21.com>
 LABEL maintainer="Jamie Curnow <jc@jc21.com>"
 
-RUN apk update && apk add --no-cache curl && rm -rf /var/cache/apk/*
+RUN apt-get update \
+    && apt-get install -y curl \
+    && apt-get clean
 
 ENV NODE_ENV=production
 
-ADD config/default.json /srv/app/config/default.json
 ADD dist                /srv/app/dist
 ADD node_modules        /srv/app/node_modules
-ADD views               /srv/app/views
 ADD LICENCE             /srv/app/LICENCE
 ADD package.json        /srv/app/package.json
 ADD src/backend         /srv/app/src/backend
