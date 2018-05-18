@@ -109,6 +109,10 @@ const internalRepo = {
             .then(result => {
                 if (typeof result.repositories !== 'undefined') {
                     let repositories = [];
+
+                    // sort images
+                    result.repositories = result.repositories.sort((a, b) => a.localeCompare(b));
+
                     _.map(result.repositories, function (repo) {
                         repositories.push({
                             name: repo
@@ -123,7 +127,7 @@ const internalRepo = {
             .then(images => {
                 if (with_tags) {
                     return new Promise((resolve, reject) => {
-                        batchflow(images).parallel(2)
+                        batchflow(images).sequential()
                             .each((i, image, next) => {
                                 let image_result = image;
                                 // for each image
@@ -140,7 +144,7 @@ const internalRepo = {
                                                 _.pullAt(tags_result.tags, [latest_idx]);
                                             }
 
-                                            // sort
+                                            // sort tags
                                             image_result.tags = tags_result.tags.sort((a, b) => a.localeCompare(b));
 
                                             if (latest_idx !== -1) {
