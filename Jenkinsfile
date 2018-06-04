@@ -23,7 +23,7 @@ pipeline {
         sh 'rm -rf node_modules'
         sh 'docker run --rm -v $(pwd):/srv/app -v /usr/local/share/.cache/yarn:/usr/local/share/.cache/yarn -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install --prod'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
-        sh 'docker build -t $TEMP_IMAGE_NAME .'
+        sh 'docker build --squash --compress -t $TEMP_IMAGE_NAME .'
 
         sh '''rm -rf zips
         mkdir -p zips
