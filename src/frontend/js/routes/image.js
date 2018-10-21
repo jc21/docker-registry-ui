@@ -15,6 +15,10 @@ export default (state, actions) => params => {
     let append_delete_model = false;
     let image               = null;
 
+    if (typeof params.match.params.imageDomain !== 'undefined' && params.match.params.imageDomain.length > 0) {
+      image_id = [params.match.params.imageDomain, image_id].join('/');
+    }
+
     // if image doesn't exist in state: refresh
     if (typeof state.images[image_id] === 'undefined' || !state.images[image_id]) {
         refresh = true;
