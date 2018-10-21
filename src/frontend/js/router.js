@@ -28,6 +28,7 @@ export default (state, actions) => {
             return div(
                 Route({path: '/', render: ImagesRoute(state, actions)}),
                 Route({path: '/image/:imageId', render: ImageRoute(state, actions)}),
+                Route({path: '/image/:imageDomain/:imageId', render: ImageRoute(state, actions)}),
                 Route({path: '/instructions/pushing', render: PushingRoute(state, actions)}),
                 Route({path: '/instructions/pulling', render: PullingRoute(state, actions)}),
                 Route({path: '/instructions/deleting', render: DeletingRoute(state, actions)})
