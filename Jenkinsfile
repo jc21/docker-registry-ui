@@ -18,16 +18,20 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'docker run --rm -v $(pwd):/srv/app -v /usr/local/share/.cache/yarn:/usr/local/share/.cache/yarn -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install'
+        // Codebase
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install'
         sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/srv/app -v /usr/local/share/.cache/yarn:/usr/local/share/.cache/yarn -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install --prod'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn --registry=$NPM_REGISTRY install --prod'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
-        sh 'docker build --squash --compress -t $TEMP_IMAGE_NAME .'
 
-        sh '''rm -rf zips
-        mkdir -p zips
-        docker run --rm -v $(pwd):/data/docker-registry-ui -w /data $DOCKER_CI_TOOLS zip -qr "/data/docker-registry-ui/zips/docker-registry-ui_$TAG_VERSION.zip" docker-registry-ui -x \\
+        // Docker Build
+        sh 'docker build --pull --no-cache --squash --compress -t $TEMP_IMAGE_NAME .'
+
+        // Zip it
+        sh 'rm -rf zips'
+        sh 'mkdir -p zips'
+        sh '''docker run --rm -v $(pwd):/data/docker-registry-ui -w /data $DOCKER_CI_TOOLS zip -qr "/data/docker-registry-ui/zips/docker-registry-ui_$TAG_VERSION.zip" docker-registry-ui -x \\
             \\*.gitkeep \\
             docker-registry-ui/zips\\* \\
             docker-registry-ui/bin\\* \\
@@ -52,10 +56,13 @@ pipeline {
         branch 'master'
       }
       steps {
+        // Private Registry
         sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
         sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
         sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:$TAG_VERSION'
         sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:$TAG_VERSION'
+
+        // Public Registry
         sh 'docker tag $TEMP_IMAGE_NAME docker.io/jc21/$IMAGE_NAME:latest'
         sh 'docker tag $TEMP_IMAGE_NAME docker.io/jc21/$IMAGE_NAME:$TAG_VERSION'
 
@@ -65,6 +72,7 @@ pipeline {
           sh 'docker push docker.io/jc21/$IMAGE_NAME:$TAG_VERSION'
         }
 
+        // Artifacts
         dir(path: 'zips') {
           archiveArtifacts(artifacts: '**/*.zip', caseSensitive: true, onlyIfSuccessful: true)
         }
