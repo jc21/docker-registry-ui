@@ -18,12 +18,14 @@ pipeline {
     }
     stage('Build') {
       steps {
-        // Codebase
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn install'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm run-script build'
-        sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn install --prod'
-        sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
+        withNPM(npmrcConfig: 'local-npm-jcurnow') {
+          // Codebase
+          sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn install'
+          sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm run-script build'
+          sh 'rm -rf node_modules'
+          sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn install --prod'
+          sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
+        }
 
         // Docker Build
         sh 'docker build --pull --no-cache --squash --compress -t $TEMP_IMAGE_NAME .'
