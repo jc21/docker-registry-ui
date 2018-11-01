@@ -10,22 +10,14 @@ pipeline {
     TAG_VERSION     = getPackageVersion()
   }
   stages {
-    stage('Prepare') {
-        steps {
-          sh 'docker pull jc21/node'
-          sh 'docker pull $DOCKER_CI_TOOLS'
-      }
-    }
     stage('Build') {
       steps {
-        withNPM(npmrcConfig: 'local-npm-jcurnow') {
-          // Codebase
-          sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn install'
-          sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node npm run-script build'
-          sh 'rm -rf node_modules'
-          sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app jc21/node yarn install --prod'
-          sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
-        }
+        // Codebase
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE yarn install'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE npm run-script build'
+        sh 'rm -rf node_modules'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE yarn install --prod'
+        sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
 
         // Docker Build
         sh 'docker build --pull --no-cache --squash --compress -t $TEMP_IMAGE_NAME .'
