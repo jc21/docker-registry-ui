@@ -1,30 +1,7 @@
-const winston = require('winston');
+const {Signale} = require('signale');
 
-winston.remove(winston.transports.Console);
-
-winston.add(winston.transports.Console, {
-    colorize:    true,
-    timestamp:   true,
-    prettyPrint: true,
-    depth:       3
-});
-
-winston.setLevels({
-    error:   0,
-    warn:    1,
-    info:    2,
-    success: 2,
-    verbose: 3,
-    debug:   4
-});
-
-winston.addColors({
-    error:   'red',
-    warn:    'yellow',
-    info:    'cyan',
-    success: 'green',
-    verbose: 'blue',
-    debug:   'magenta'
-});
-
-module.exports = winston;
+module.exports = {
+    global:  new Signale({scope: 'Global  '}),
+    migrate: new Signale({scope: 'Migrate '}),
+    express: new Signale({scope: 'Express '})
+};

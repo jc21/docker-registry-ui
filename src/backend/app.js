@@ -3,8 +3,7 @@
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const compression = require('compression');
-const loggers     = require('./lib/loggers');
-const logger      = loggers.default;
+const log         = require('./logger').express;
 
 /**
  * App
@@ -77,7 +76,7 @@ app.use(function (err, req, res, next) {
 
     // Not every error is worth logging - but this is good for now until it gets annoying.
     if (typeof err.stack !== 'undefined' && err.stack) {
-        logger.warn(err.stack);
+        log.warn(err.stack);
     }
 
     res

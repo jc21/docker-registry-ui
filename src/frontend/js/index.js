@@ -113,7 +113,7 @@ window.tabler = {
     }
 };
 
-require('tabler-core');
+import tabler from 'tabler-core';
 
 const main = app(
     state,

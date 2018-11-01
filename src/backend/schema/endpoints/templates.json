@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "id": "endpoints/templates",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "endpoints/templates",
   "title": "Templates",
   "description": "Endpoints relating to Templates",
   "stability": "stable",

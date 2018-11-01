@@ -1,7 +1,7 @@
 const path                 = require('path');
+const webpack              = require('webpack');
 const HtmlWebPackPlugin    = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin       = require('uglifyjs-webpack-plugin');
 const Visualizer           = require('webpack-visualizer-plugin');
 const CopyWebpackPlugin    = require('copy-webpack-plugin');
 
@@ -83,6 +83,10 @@ module.exports = {
         ]
     },
     plugins:      [
+        new webpack.ProvidePlugin({
+            $:      'jquery',
+            jQuery: 'jquery'
+        }),
         new HtmlWebPackPlugin({
             template: './src/frontend/html/index.html',
             filename: './index.html'
@@ -100,31 +104,5 @@ module.exports = {
             toType:  'dir',
             context: '/srv/app'
         }])
-    ],
-    optimization: {
-        minimizer: [
-            new UglifyJsPlugin({
-                cache:         './tmp/.webpack-cache',
-                parallel:      4,
-                uglifyOptions: {
-                    ecma:     6,
-                    compress: {
-                        drop_console: false
-                    },
-                    output:   {
-                        comments: false,
-                        beautify: false
-                    },
-                    ie8:      false
-                }
-            })
-        ]
-    },
-    devServer:    {
-        contentBase:      path.join(__dirname, 'dist'),
-        compress:         true,
-        port:             8080,
-        disableHostCheck: true,
-        host:             '0.0.0.0'
-    }
+    ]
 };

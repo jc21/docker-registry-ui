@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "id": "definitions",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "definitions",
   "definitions": {
     "id": {
       "description": "Unique identifier",

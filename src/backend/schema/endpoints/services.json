@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "id": "endpoints/services",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "endpoints/services",
   "title": "Services",
   "description": "Endpoints relating to Services",
   "stability": "stable",

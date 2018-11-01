@@ -137,7 +137,7 @@ const internalRepo = {
                                             // usually some sort of error
                                             console.error('Error: Tags result was: ', tags_result);
                                             image_result.tags = null;
-                                        } else {
+                                        } else if (tags_result.tags !== null) {
                                             // Order the tags naturally, but put latest at the top if it exists
                                             let latest_idx = tags_result.tags.indexOf('latest');
                                             if (latest_idx !== -1) {
