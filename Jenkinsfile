@@ -13,10 +13,10 @@ pipeline {
     stage('Build') {
       steps {
         // Codebase
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE yarn install'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE yarn install --registry=$NPM_LOCAL_REGISTRY'
         sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE yarn install --prod'
+        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app $DOCKER_NODE yarn install --prod --registry=$NPM_LOCAL_REGISTRY'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
 
         // Docker Build
