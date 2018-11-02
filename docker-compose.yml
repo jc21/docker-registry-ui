@@ -1,7 +1,7 @@
 version: "2"
 services:
   app:
-    image: jc21/node
+    image: node:9-slim
     ports:
       - 4000:80
     environment:
