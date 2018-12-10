@@ -1,7 +1,8 @@
 const {Signale} = require('signale');
 
 module.exports = {
-    global:  new Signale({scope: 'Global  '}),
-    migrate: new Signale({scope: 'Migrate '}),
-    express: new Signale({scope: 'Express '})
+    global:   new Signale({scope: 'Global  '}),
+    migrate:  new Signale({scope: 'Migrate '}),
+    express:  new Signale({scope: 'Express '}),
+    registry: new Signale({scope: 'Registry'}),
 };

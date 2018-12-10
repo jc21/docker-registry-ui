@@ -12,7 +12,10 @@ services:
       - REGISTRY_DOMAIN=${REGISTRY_HOST}
       - REGISTRY_STORAGE_DELETE_ENABLED=true
       - REGISTRY_SSL=${REGISTRY_SSL}
+      - REGISTRY_USER=${REGISTRY_USER}
+      - REGISTRY_PASS=${REGISTRY_PASS}
     volumes:
       - .:/srv/app
+    working_dir: /srv/app
     command: node --max_old_space_size=250 --abort_on_uncaught_exception node_modules/nodemon/bin/nodemon.js
 

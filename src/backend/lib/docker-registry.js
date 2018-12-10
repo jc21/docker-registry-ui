@@ -7,11 +7,13 @@ const rest = require('restler');
  *
  * @param   {String}   domain
  * @param   {Boolean}  use_ssl
+ * @param   {String}   [username]
+ * @param   {String}   [password]
  * @returns {module}
  */
-module.exports = function (domain, use_ssl) {
+module.exports = function (domain, use_ssl, username, password) {
 
-    this._baseurl = 'http' + (use_ssl ? 's' : '') + '://' + domain + '/v2/';
+    this._baseurl = 'http' + (use_ssl ? 's' : '') + '://' + (username ? username + ':' + password + '@' : '') + domain + '/v2/';
 
     /**
      * @param   {Integer}  [version]

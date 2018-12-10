@@ -50,7 +50,29 @@ pipeline {
         exit $?'''
       }
     }
-    stage('Publish') {
+    stage('Publish Develop') {
+      when {
+        branch 'develop'
+      }
+      steps {
+        // Private Registry
+        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
+        sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
+
+        // Public Registry
+        sh 'docker tag $TEMP_IMAGE_NAME docker.io/jc21/$IMAGE_NAME:develop'
+        withCredentials([usernamePassword(credentialsId: 'jc21-dockerhub', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
+          sh "docker login -u '${duser}' -p '$dpass'"
+          sh 'docker push docker.io/jc21/$IMAGE_NAME:develop'
+        }
+
+        // Artifacts
+        dir(path: 'zips') {
+          archiveArtifacts(artifacts: '**/*.zip', caseSensitive: true, onlyIfSuccessful: true)
+        }
+      }
+    } 
+    stage('Publish Master') {
       when {
         branch 'master'
       }

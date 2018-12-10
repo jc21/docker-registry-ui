@@ -1,6 +1,6 @@
 {
     "name": "docker-registry-ui",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "A nice web interface for managing your Docker Registry images",
     "main": "src/backend/index.js",
     "dependencies": {

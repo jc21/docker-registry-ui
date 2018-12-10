@@ -2,7 +2,7 @@
 
 # Docker Registry UI
 
-![Version](https://img.shields.io/badge/version-2.0.1-green.svg)
+![Version](https://img.shields.io/badge/version-2.0.2-green.svg)
 ![Stars](https://img.shields.io/docker/stars/jc21/registry-ui.svg)
 ![Pulls](https://img.shields.io/docker/pulls/jc21/registry-ui.svg)
 
@@ -14,11 +14,6 @@ Note: This project only works with Docker Registry v2.
 
 
 ## Getting started
-
-### Using [Rancher](https://rancher.com)?
-
-Easily start a Registry Stack by adding [my template catalog](https://github.com/jc21/rancher-templates).
-
 
 ### Creating a full Docker Registry Stack with this UI
 
@@ -48,6 +43,8 @@ services:
       - REGISTRY_SSL=true
       - REGISTRY_DOMAIN=your-registry-server.com:5000
       - REGISTRY_STORAGE_DELETE_ENABLED=
+      - REGISTRY_USER=
+      - REGISTRY_PASS=
     restart: on-failure
 ```
 
@@ -62,6 +59,10 @@ as an example. Note that there are some tweaks in there that you will need to be
 - **`REGISTRY_SSL`** - *Optional:* Specify `true` for this if the registry is accessed via HTTPS
 - **`REGISTRY_DOMAIN`** - *Optional:* This is the registry domain to display in the UI for example push/pull code
 - **`REGISTRY_STORAGE_DELETE_ENABLED`** - *Optional:* Specify `true` or `1` to enable deletion features, but see below first!
+- **`REGISTRY_USER`** - *Optional:* If your docker registry is behind basic auth, specify the username
+- **`REGISTRY_PASS`** - *Optional:* If your docker registry is behind basic auth, specify the password
+
+Refer to the docker documentation for setting up [native basic auth](https://docs.docker.com/registry/deploying/#restricting-access).
 
 
 ## Deletion Support
@@ -109,4 +110,4 @@ And if you wanted to make a cron job that runs every 30 mins:
 ## TODO
 
 - Add pagination to Repositories, currently only 300 images will be fetched
-- Add support for registry authentication mechanisms
+- Add support for token based registry authentication mechanisms

@@ -2,12 +2,15 @@
 
 const REGISTRY_HOST = process.env.REGISTRY_HOST;
 const REGISTRY_SSL  = process.env.REGISTRY_SSL && process.env.REGISTRY_SSL.toLowerCase() === 'true' || parseInt(process.env.REGISTRY_SSL, 10) === 1;
+const REGISTRY_USER = process.env.REGISTRY_USER;
+const REGISTRY_PASS = process.env.REGISTRY_PASS;
 
 const _         = require('lodash');
 const Docker    = require('../lib/docker-registry');
 const batchflow = require('batchflow');
-const registry  = new Docker(REGISTRY_HOST, REGISTRY_SSL);
+const registry  = new Docker(REGISTRY_HOST, REGISTRY_SSL, REGISTRY_USER, REGISTRY_PASS);
 const errors    = require('../lib/error');
+const logger    = require('../logger').registry;
 
 const internalRepo = {
 
@@ -80,7 +83,7 @@ const internalRepo = {
                                             });
                                     })
                                     .catch(err => {
-                                        console.error(err);
+                                        logger.error(err);
                                         next(null);
                                     });
                             })
@@ -107,7 +110,10 @@ const internalRepo = {
     getAll: with_tags => {
         return registry.getImages()
             .then(result => {
-                if (typeof result.repositories !== 'undefined') {
+                if (typeof result.errors !== 'undefined' && result.errors.length) {
+                    let first_err = result.errors.shift();
+                    throw new errors.RegistryError(first_err.code, first_err.message);
+                } else if (typeof result.repositories !== 'undefined') {
                     let repositories = [];
 
                     // sort images
@@ -135,9 +141,9 @@ const internalRepo = {
                                     .then(tags_result => {
                                         if (typeof tags_result === 'string') {
                                             // usually some sort of error
-                                            console.error('Error: Tags result was: ', tags_result);
+                                            logger.error('Tags result was: ', tags_result);
                                             image_result.tags = null;
-                                        } else if (tags_result.tags !== null) {
+                                        } else if (typeof tags_result.tags !== 'undefined' && tags_result.tags !== null) {
                                             // Order the tags naturally, but put latest at the top if it exists
                                             let latest_idx = tags_result.tags.indexOf('latest');
                                             if (latest_idx !== -1) {
@@ -155,7 +161,7 @@ const internalRepo = {
                                         next(image_result);
                                     })
                                     .catch(err => {
-                                        console.error(err);
+                                        logger.error(err);
                                         image_result.tags = null;
                                         next(image_result);
                                     });
