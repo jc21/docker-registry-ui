@@ -24,7 +24,7 @@
         "babel-loader": "^7.1.4",
         "babel-minify-webpack-plugin": "^0.3.1",
         "babel-preset-env": "^1.7.0",
-        "@hyperapp/html": "git+https://github.com/maxholman/hyperapp-html.git#smart-tags",
+        "@hyperapp/html": "git+https://github.com/maxholman/hyperapp-html.git#5bde674d42c87bb8191f8cc11a8a3c7d334e3dfb",
         "babel-plugin-transform-react-jsx": "^6.24.1",
         "copy-webpack-plugin": "^4.5.4",
         "css-loader": "^1.0.0",
