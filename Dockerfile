@@ -9,14 +9,15 @@ RUN apt-get update \
 
 ENV NODE_ENV=production
 
-ADD dist                /srv/app/dist
-ADD node_modules        /srv/app/node_modules
-ADD LICENCE             /srv/app/LICENCE
-ADD package.json        /srv/app/package.json
-ADD src/backend         /srv/app/src/backend
+ADD dist                /app/dist
+ADD node_modules        /app/node_modules
+ADD LICENCE             /app/LICENCE
+ADD package.json        /app/package.json
+ADD src/backend         /app/src/backend
 
-WORKDIR /srv/app
+WORKDIR /app
 
 CMD node --max_old_space_size=250 --abort_on_uncaught_exception src/backend/index.js
 
 HEALTHCHECK --interval=15s --timeout=3s CMD curl -f http://localhost/ || exit 1
+

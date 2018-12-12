@@ -102,7 +102,7 @@ module.exports = {
             from:    'src/frontend/app-images',
             to:      'images',
             toType:  'dir',
-            context: '/srv/app'
+            context: '/app'
         }])
     ]
 };
