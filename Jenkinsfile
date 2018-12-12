@@ -20,10 +20,10 @@ pipeline {
     stage('Build') {
       steps {
         // Codebase
-        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --verbose --network-concurrency 4 --registry $NPM_LOCAL_REGISTRY'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --verbose --network-concurrency 1 --registry $NPM_LOCAL_REGISTRY'
         sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --verbose --network-concurrency 4 --prod --registry $NPM_LOCAL_REGISTRY'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --verbose --network-concurrency 1 --prod --registry $NPM_LOCAL_REGISTRY'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
 
         // Docker Build
