@@ -20,10 +20,10 @@ pipeline {
     stage('Build') {
       steps {
         // Codebase
-        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --registry=$NPM_LOCAL_REGISTRY'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --verbose --network-concurrency 4 --registry $NPM_LOCAL_REGISTRY'
         sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --prod --registry=$NPM_LOCAL_REGISTRY'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --verbose --network-concurrency 4 --prod --registry $NPM_LOCAL_REGISTRY'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
 
         // Docker Build
@@ -69,14 +69,14 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'jc21-private-registry', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
           sh "docker login -u '${duser}' -p '$dpass' $DOCKER_PRIVATE_REGISTRY"
           sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
-        } 
+        }
 
         // Artifacts
         dir(path: 'zips') {
           archiveArtifacts(artifacts: '**/*.zip', caseSensitive: true, onlyIfSuccessful: true)
         }
       }
-    } 
+    }
     stage('Publish Master') {
       when {
         branch 'master'
