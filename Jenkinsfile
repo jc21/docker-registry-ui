@@ -8,20 +8,22 @@ pipeline {
     IMAGE_NAME      = "registry-ui"
     TEMP_IMAGE_NAME = "registry-ui-build_${BUILD_NUMBER}"
     TAG_VERSION     = getPackageVersion()
+    BASE_IMAGE_NAME = "jc21/node:latest"
   }
   stages {
     stage('Prepare') {
       steps {
-        sh 'docker pull node:9-slim'
+        sh 'docker pull jc21/node:latest'
+        sh 'docker pull $DOCKER_CI_TOOLS'
       }
     }
     stage('Build') {
       steps {
         // Codebase
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app node:9-slim yarn install --registry=$NPM_LOCAL_REGISTRY'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app node:9-slim npm run-script build'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/srv/app -w /srv/app node:9-slim yarn install --prod --registry=$NPM_LOCAL_REGISTRY'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --prod'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
 
         // Docker Build
@@ -55,16 +57,19 @@ pipeline {
         branch 'develop'
       }
       steps {
-        // Private Registry
-        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
-        sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
-
         // Public Registry
         sh 'docker tag $TEMP_IMAGE_NAME docker.io/jc21/$IMAGE_NAME:develop'
         withCredentials([usernamePassword(credentialsId: 'jc21-dockerhub', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
           sh "docker login -u '${duser}' -p '$dpass'"
           sh 'docker push docker.io/jc21/$IMAGE_NAME:develop'
         }
+
+        // Private Registry
+        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
+        withCredentials([usernamePassword(credentialsId: 'jc21-private-registry', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
+          sh "docker login -u '${duser}' -p '$dpass' $DOCKER_PRIVATE_REGISTRY"
+          sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:develop'
+        } 
 
         // Artifacts
         dir(path: 'zips') {
@@ -77,20 +82,22 @@ pipeline {
         branch 'master'
       }
       steps {
-        // Private Registry
-        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
-        sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
-        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:$TAG_VERSION'
-        sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:$TAG_VERSION'
-
         // Public Registry
         sh 'docker tag $TEMP_IMAGE_NAME docker.io/jc21/$IMAGE_NAME:latest'
         sh 'docker tag $TEMP_IMAGE_NAME docker.io/jc21/$IMAGE_NAME:$TAG_VERSION'
-
         withCredentials([usernamePassword(credentialsId: 'jc21-dockerhub', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
           sh "docker login -u '${duser}' -p '$dpass'"
           sh 'docker push docker.io/jc21/$IMAGE_NAME:latest'
           sh 'docker push docker.io/jc21/$IMAGE_NAME:$TAG_VERSION'
+        }
+
+        // Private Registry
+        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
+        sh 'docker tag $TEMP_IMAGE_NAME $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:$TAG_VERSION'
+        withCredentials([usernamePassword(credentialsId: 'jc21-private-registry', passwordVariable: 'dpass', usernameVariable: 'duser')]) {
+          sh "docker login -u '${duser}' -p '$dpass' $DOCKER_PRIVATE_REGISTRY"
+          sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:latest'
+          sh 'docker push $DOCKER_PRIVATE_REGISTRY/$IMAGE_NAME:$TAG_VERSION'
         }
 
         // Artifacts
