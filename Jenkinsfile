@@ -20,10 +20,10 @@ pipeline {
     stage('Build') {
       steps {
         // Codebase
-        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --registry=$NPM_REGISTRY'
         sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME npm run-script build'
         sh 'rm -rf node_modules'
-        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --prod'
+        sh 'docker run --rm -v $(pwd):/app -w /app $BASE_IMAGE_NAME yarn install --prod --registry=$NPM_REGISTRY'
         sh 'docker run --rm -v $(pwd):/data $DOCKER_CI_TOOLS node-prune'
 
         // Docker Build
