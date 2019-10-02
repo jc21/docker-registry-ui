@@ -52,7 +52,7 @@ router
  * /api/repos/abc123
  */
 router
-    .route('/:name([-a-zA-Z0-9/]+)')
+    .route('/:name([-a-zA-Z0-9/,_]+)')
     .options((req, res) => {
         res.sendStatus(204);
     })
