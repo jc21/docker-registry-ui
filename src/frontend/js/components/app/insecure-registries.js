@@ -5,7 +5,7 @@ export default domain => div({class: 'card'},
         h3({class: 'card-title'}, 'Insecure Registries')
     ),
     div({class: 'card-body'}, [
-        p('If this registry is insecure and doesn\'t hide behing SSL certificates then you will need to configure your Docker client to allow pushing to this insecure registry.'),
+        p('If this registry is insecure and doesn\'t hide behind SSL certificates then you will need to configure your Docker client to allow pushing to this insecure registry.'),
         h4('Linux'),
         p('Edit or you may even need to create the following file on your Linux server:'),
         pre(
