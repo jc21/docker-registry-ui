@@ -43,7 +43,7 @@
         "numeral": "^2.0.6",
         "sass-loader": "^7.1.0",
         "style-loader": "^0.23.1",
-        "tabler-ui": "git+https://github.com/tabler/tabler.git",
+        "tabler-ui": "git+https://github.com/tabler/tabler.git#a09fd463309f2b395653e3615c98d1e8aca35b31",
         "uglifyjs-webpack-plugin": "^2.0.1",
         "webpack": "^4.12.0",
         "webpack-cli": "^3.0.8",
