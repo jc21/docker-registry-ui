@@ -22,9 +22,9 @@ pipeline {
 		stage('Build') {
 			steps {
 				// Codebase
-				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" chown -R "$(id -u):$(id -g)" *'
 				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" yarn install'
 				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" yarn build'
+				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" chown -R "$(id -u):$(id -g)" *'
 				sh 'rm -rf node_modules'
 				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" yarn install --prod'
 				sh 'docker run --rm -v $(pwd):/data "${DOCKER_CI_TOOLS}" node-prune'
