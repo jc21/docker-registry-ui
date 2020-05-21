@@ -22,6 +22,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				// Codebase
+				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" chown -R "$(id -u):$(id -g)" *'
 				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" yarn install'
 				sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" yarn build'
 				sh 'rm -rf node_modules'
@@ -51,6 +52,11 @@ pipeline {
 						docker-registry-ui/webpack.config.js \\
 						docker-registry-ui/webpack_stats.html
 				'''
+			}
+			post {
+				always {
+					sh 'docker run --rm -v $(pwd):/app -w /app "${BASE_IMAGE_NAME}" chown -R "$(id -u):$(id -g)" *'
+				}
 			}
 		}
 		stage('Publish Develop') {
