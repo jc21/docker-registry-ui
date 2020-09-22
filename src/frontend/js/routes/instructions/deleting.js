@@ -33,7 +33,7 @@ export default (state, actions) => params => div(
                     ),
                     p('And if you wanted to make a cron job that runs every 30 mins:'),
                     pre(
-                        code('0,30 * * * * /bin/docker exec -it my-registry bin/registry garbage-collect /etc/docker/registry/config.yml >> /dev/null 2>&1')
+                        code('0,30 * * * * /usr/bin/docker exec -i my-registry bin/registry garbage-collect /etc/docker/registry/config.yml >> /dev/null 2>&1')
                     )
                 ])
             ])
