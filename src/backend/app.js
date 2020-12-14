@@ -33,14 +33,22 @@ app.use(require('./lib/express/cors'));
 
 // General security/cache related headers + server header
 app.use(function (req, res, next) {
+    const { CONTENT_SECURITY_POLICY } = process.env;
+    const headers = CONTENT_SECURITY_POLICY ? {
+        'Content-Security-Policy':   CONTENT_SECURITY_POLICY
+    } : {
+        'Content-Security-Policy':   'frame-ancestors "none";',
+        'X-Frame-Options':           'DENY'
+    };
+
     res.set({
         'Strict-Transport-Security': 'includeSubDomains; max-age=631138519; preload',
         'X-XSS-Protection':          '0',
         'X-Content-Type-Options':    'nosniff',
-        'X-Frame-Options':           'DENY',
         'Cache-Control':             'no-cache, no-store, max-age=0, must-revalidate',
         Pragma:                      'no-cache',
-        Expires:                     0
+        Expires:                     0,
+        ...headers
     });
     next();
 });
@@ -59,7 +67,6 @@ app.use('/', require('./routes/main'));
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-
     let payload = {
         error: {
             code:    err.status,
