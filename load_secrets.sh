@@ -5,6 +5,7 @@ shopt -s nullglob
 log() {
 	local type="$1"; shift
 	printf '%s [%s] [CMD]: %s\n' "$(date --rfc-3339=seconds)" "$type" "$*"
+}
   
 error() {
 	log ERROR "$@" >&2
@@ -33,9 +34,13 @@ file_env() {
 }
 
 # Initialize values that might be stored in a file
+docker_setup_env() {
 	file_env 'REGISTRY_HOST' '%'
 	file_env 'REGISTRY_SSL'
 	file_env 'REGISTRY_DOMAIN'
 	file_env 'REGISTRY_STORAGE_DELETE_ENABLED'
 	file_env 'REGISTRY_USER'
-  file_env 'REGISTRY_PASS'
+	file_env 'REGISTRY_PASS'
+}
+
+docker_setup_env;
