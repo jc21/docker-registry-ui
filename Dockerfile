@@ -1,6 +1,5 @@
 FROM jc21/node:latest
 
-MAINTAINER Jamie Curnow <jc@jc21.com>
 LABEL maintainer="Jamie Curnow <jc@jc21.com>"
 
 RUN apt-get update \
