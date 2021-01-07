@@ -15,9 +15,11 @@ ADD LICENCE             /app/LICENCE
 ADD package.json        /app/package.json
 ADD src/backend         /app/src/backend
 
+COPY load_secrets.sh /usr/local/bin/
+
 WORKDIR /app
 
-CMD node --max_old_space_size=250 --abort_on_uncaught_exception src/backend/index.js
+CMD load_secrets.sh && node --max_old_space_size=250 --abort_on_uncaught_exception src/backend/index.js
 
 HEALTHCHECK --interval=15s --timeout=3s CMD curl -f http://localhost/ || exit 1
 
