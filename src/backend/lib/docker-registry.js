@@ -13,18 +13,23 @@ const rest = require('restler');
  */
 module.exports = function (domain, use_ssl, username, password) {
 
-    this._baseurl = 'http' + (use_ssl ? 's' : '') + '://' + (username ? username + ':' + password + '@' : '') + domain + '/v2/';
+    this._baseurl = 'http' + (use_ssl ? 's' : '') + '://' + domain + '/v2/';
 
     /**
      * @param   {Integer}  [version]
      * @returns {Object}
      */
     this.getUrlOptions = function (version) {
-        let options = {
+            let options = {
             headers: {
                 'User-Agent': 'Docker Registry UI'
             }
         };
+
+        if (username.length > 0 && password.length > 0) {
+            options.username = username;
+            options.password = password;
+        }
 
         if (version === 2) {
             options.headers.Accept = 'application/vnd.docker.distribution.manifest.v2+json';
